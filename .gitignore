@@ -1,6 +1,7 @@
 /srcback/bin
 /srcback/obj
 
+/db_data
 
 /srcfront/node_modules
 /srcfront/.pnp

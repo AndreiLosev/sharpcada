@@ -1,0 +1,14 @@
+/srcback/bin
+/srcback/obj
+
+
+/srcfront/node_modules
+/srcfront/.pnp
+.pnp.js
+/srcfront/coverage
+/srcfront/build
+.env
+
+/srcfront/npm-debug.log*
+/srcfront/yarn-debug.log*
+/srcfront/yarn-error.log*

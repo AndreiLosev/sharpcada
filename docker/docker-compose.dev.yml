@@ -1,0 +1,16 @@
+version: '3.1'
+
+services:
+
+  server:
+    ports:
+      - ${SERVER_PORT}:80
+  app:
+    volumes:
+      - ../srcback/bin/Debug/net7.0/:/app
+    command: dotnet run
+    ports:
+      - 5711:4711
+  db:
+    ports:
+      - ${DB_PORT}:5432

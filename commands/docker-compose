@@ -2,5 +2,10 @@
 
 SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
+ENV_FILE=$SCRIPTPATH/../docker/.env
 
-docker-compose --env-file $SCRIPTPATH/../docker/.env -f $SCRIPTPATH/../docker/docker-compose.yml $@
+export $(grep -v '^#' "$ENV_FILE" | xargs)
+
+docker-compose --env-file $ENV_FILE \
+    -f $SCRIPTPATH/../docker/docker-compose.yml \
+    -f $SCRIPTPATH/../docker/docker-compose.${APP_ENV}.yml $@

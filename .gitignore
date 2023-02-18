@@ -13,3 +13,5 @@
 /srcfront/npm-debug.log*
 /srcfront/yarn-debug.log*
 /srcfront/yarn-error.log*
+
+.vscode

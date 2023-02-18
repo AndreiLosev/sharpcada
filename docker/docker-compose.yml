@@ -5,8 +5,6 @@ services:
   server:
     container_name: sharpcada-server
     image: nginx:1.23
-    ports:
-      - ${SERVER_PORT}:80
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/templates/nginx.conf.template
       - ../www/:/usr/share/nginx/html/
@@ -20,12 +18,9 @@ services:
   app:
     build:
       context: ../
-      dockerfile: ./docker/app/Dockerfile
+      dockerfile: ./docker/app/Dockerfile.${APP_ENV}
     container_name: sharpcada-app
     restart: ${DOCKER_RESTART}
-    volumes:
-      - ../srcback/:/app
-    command: dotnet watch run --urls http://0.0.0.0:${APP_PORT}
     networks:
       - internal
   db:
@@ -34,8 +29,6 @@ services:
     restart: ${DOCKER_RESTART}
     volumes:
       - ../db_data/:/var/lib/postgresql/data
-    ports:
-      - ${DB_PORT}:5432
     environment:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}

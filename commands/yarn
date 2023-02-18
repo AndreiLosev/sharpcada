@@ -3,6 +3,4 @@
 SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
 
-CURRENT_USER_ID=$(id -u $USER)
-
-docker run --rm -v $SCRIPTPATH/../srcfront/:/app -it -w /app/ -p 127.0.0.1:3000:3000 node:18 npm $@
+docker run --rm -v $SCRIPTPATH/../srcfront/:/app -it -w /app/ -p 127.0.0.1:3000:3000 node:18 yarn $@

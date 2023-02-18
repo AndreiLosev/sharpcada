@@ -1,0 +1,9 @@
+FROM mcr.microsoft.com/dotnet/sdk:7.0
+
+RUN usermod -u 1000 www-data
+RUN curl -k -L https://github.com/Samsung/netcoredbg/releases/download/2.2.0-961/netcoredbg-linux-amd64.tar.gz \
+    --output netcoredbg.tar.gz && tar -xzf netcoredbg.tar.gz -C "/" && rm netcoredbg.tar.gz
+
+WORKDIR /app
+
+ENTRYPOINT [ "dotnet", "sharpcada.dll" ]

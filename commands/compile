@@ -1,0 +1,12 @@
+#!/bin/bash
+
+SCRIPT=$(readlink -f "$0")
+SCRIPTPATH=$(dirname "$SCRIPT")
+
+docker stop sharpcada-app
+
+docker run --rm -v ${SCRIPTPATH}/../srcback/:/home/andrei/prog/sharpcada/srcback/ -it \
+    -w /home/andrei/prog/sharpcada/srcback/ \
+    mcr.microsoft.com/dotnet/sdk:7.0 dotnet build
+
+docker start sharpcada-app

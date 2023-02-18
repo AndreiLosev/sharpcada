@@ -1,20 +1,14 @@
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
-EXPOSE 5192
 
-ENV ASPNETCORE_URLS=http://+:5192
-
-# Creates a non-root user with an explicit UID and adds permission to access the /app folder
-# For more info, please refer to https://aka.ms/vscode-docker-dotnet-configure-containers
-RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
-USER appuser
+RUN usermod -u 1000 www-data
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["srcback/sharpcada.csproj", "srcback/"]
-RUN dotnet restore "srcback/sharpcada.csproj"
-COPY . .
-WORKDIR "/src/srcback"
+COPY  ../../srcback/sharpcada.csproj .
+RUN dotnet restore ./sharpcada.csproj
+COPY ../../srcback/ .
+
 RUN dotnet build "sharpcada.csproj" -c Release -o /app/build
 
 FROM build AS publish

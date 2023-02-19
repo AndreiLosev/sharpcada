@@ -7,8 +7,13 @@ public class ContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
 {
     public ApplicationDbContext CreateDbContext(string[] args)
     {
+        var builder = new ConfigurationBuilder();
+        builder.AddEnvironmentVariables();
+        var config = builder.Build();
+        var connectionString = config.GetValue<string>("DB_CONNECTION_STRING");
         var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-        optionsBuilder.UseNpgsql("Host=db;Port=5432;Database=sharpcada;Username=user1;Password=password1");
+        optionsBuilder.UseNpgsql(connectionString);
+
         return new ApplicationDbContext(optionsBuilder.Options);
     }
 }

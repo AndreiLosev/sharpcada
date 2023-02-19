@@ -1,0 +1,28 @@
+#!/bin/bash
+
+SCRIPT=$(readlink -f "$0")
+SCRIPTPATH=$(dirname "$SCRIPT")
+
+CONTAINER_NAME="sharpcada-app-compile"
+
+IS_RUNNING=$(docker ps | grep sharpcada-app)
+CONTAINER_IS_EXISTS=$(docker container ps -a | grep $CONTAINER_NAME )
+
+if [ -n "$IS_RUNNING" ]; then
+    docker stop sharpcada-app
+fi
+
+if [ -n "$CONTAINER_IS_EXISTS" ]; then
+    docker container start -i $CONTAINER_NAME
+else
+    docker run \
+        -v ${SCRIPTPATH}/../srcback/:/home/andrei/prog/sharpcada/srcback/ -it \
+        -w /home/andrei/prog/sharpcada/srcback/ \
+        --name $CONTAINER_NAME \
+        mcr.microsoft.com/dotnet/sdk:7.0 dotnet build
+fi
+
+if [ -n "$IS_RUNNING" ]; then
+    docker start sharpcada-app
+fi
+

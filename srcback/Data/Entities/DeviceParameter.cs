@@ -10,25 +10,25 @@ public class DeviceParameter : EntityBase
     public ParameterType Type { get; set; }
     public float CastK { get; set; }
     public float CastB { get; set; }
-    public ulong DeviceId { get; set; }
+    public long DeviceId { get; set; }
     public Device? Device { get; set; }
     public List<NetworkChannel> NetworkChannels { set; get; } = new();
     public List<NetworkChannelDeviceParameter> ParameterChannels { set; get; } = new();
 }
 
-public enum ParameterType
+public enum ParameterType : byte
 {
     Bool = 0,
     Int8 = 1,
     Int16 = 2,
-    Int32 = 4,
-    Int64 = 8,
-    Uint8 = 16,
-    Uint16 = 32,
-    Uint32 = 64,
-    Uint64 = 128,
-    Float32 = 256,
-    Float64 = 512,
+    Int32 = 3,
+    Int64 = 4,
+    Uint8 = 5,
+    Uint16 = 6,
+    Uint32 = 7,
+    Uint64 = 8,
+    Float32 = 9,
+    Float64 = 10,
 }
 
 public static class ModelBuilderForDeviceParameterExtension

@@ -21,6 +21,10 @@ services:
       dockerfile: ./docker/app/Dockerfile.${APP_ENV}
     container_name: sharpcada-app
     restart: ${DOCKER_RESTART}
+    env_file:
+      - ../.env
+    environment:
+      - APP_PORT=${APP_PORT}
     networks:
       - internal
   db:

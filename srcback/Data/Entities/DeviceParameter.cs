@@ -12,6 +12,8 @@ public class DeviceParameter : EntityBase
     public float CastB { get; set; }
     public ulong DeviceId { get; set; }
     public Device? Device { get; set; }
+    public List<NetworkChannel> NetworkChannels { set; get; } = new();
+    public List<NetworkChannelDeviceParameter> ParameterChannels { set; get; } = new();
 }
 
 public enum ParameterType

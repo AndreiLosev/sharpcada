@@ -2,9 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using sharpcada.Data.Entities;
 
-
 namespace sharpcada.Data;
-
 
 public class ApplicationDbContext : DbContext
 {
@@ -27,6 +25,7 @@ public class ApplicationDbContext : DbContext
         modelBuilder.SetPropetyToDeviceParameterEntity();
         modelBuilder.SetPropetyToNetworkChannelEntity();
         modelBuilder.SetPropetyToModbusChannelEntity();
+        modelBuilder.SetPropetyToNetworkChannelDeviceParameterEntity();
     }
 
     public override int SaveChanges()

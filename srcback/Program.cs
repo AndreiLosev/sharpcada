@@ -1,12 +1,12 @@
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
-var db = 0;
+var db1 = 0;
 
 app.MapGet("/get", (IConfiguration appConfig) => 
 {
-    db += 1;
-    return $"Hello World! => {db}";
+    db1 += 1;
+    return $"Hello World! => {db1}";
 });
 
 
@@ -22,6 +22,6 @@ static void RunApp(WebApplication app)
     }
 
     var appPort = appConfig["APP_PORT"];
-    app.Run($"http://0.0.0.0:{appPort}");
+    app.Run($"http://+:{appPort}");
 }
 

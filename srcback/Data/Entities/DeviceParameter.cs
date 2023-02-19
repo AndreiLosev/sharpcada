@@ -5,7 +5,7 @@ namespace sharpcada.Data.Entities;
 
 public class DeviceParameter : EntityBase
 {
-    public string? Name { get; set; }
+    public string Name { get; set; } = "";
     public string? Unit { get; set; }
     public ParameterType Type { get; set; }
     public float CastK { get; set; }

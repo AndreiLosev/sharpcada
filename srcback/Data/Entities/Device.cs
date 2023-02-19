@@ -4,8 +4,8 @@ namespace sharpcada.Data.Entities;
 
 public class Device : EntityBase
 {
-    public string? Name { get; set; }
-    public string? IpAddres { get; set; }
+    public string Name { get; set; } = null!;
+    public string IpAddres { get; set; } = null!;
     public NetworkProtocol Protocol { get; set; }
     public List<DeviceParameter> Parameters { get; set; } = new();
     public List<NetworkChannel> NetworkChannels { get; set; } = new();

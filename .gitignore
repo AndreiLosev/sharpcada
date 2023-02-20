@@ -15,3 +15,5 @@
 /srcfront/yarn-error.log*
 
 .vscode
+
+/demo_devices/target

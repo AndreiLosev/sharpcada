@@ -107,6 +107,31 @@ namespace sharpcada.Migrations
                     b.ToTable("DeviceParameters");
                 });
 
+            modelBuilder.Entity("sharpcada.Data.Entities.Meterage", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long>("DeviceParameterID")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeviceParameterID");
+
+                    b.ToTable("Meterages");
+                });
+
             modelBuilder.Entity("sharpcada.Data.Entities.NetworkChannel", b =>
                 {
                     b.Property<long>("Id")
@@ -216,6 +241,15 @@ namespace sharpcada.Migrations
                     b.Navigation("Device");
                 });
 
+            modelBuilder.Entity("sharpcada.Data.Entities.Meterage", b =>
+                {
+                    b.HasOne("sharpcada.Data.Entities.DeviceParameter", null)
+                        .WithMany("Meterages")
+                        .HasForeignKey("DeviceParameterID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("sharpcada.Data.Entities.NetworkChannel", b =>
                 {
                     b.HasOne("sharpcada.Data.Entities.Device", "Device")
@@ -255,6 +289,8 @@ namespace sharpcada.Migrations
 
             modelBuilder.Entity("sharpcada.Data.Entities.DeviceParameter", b =>
                 {
+                    b.Navigation("Meterages");
+
                     b.Navigation("ParameterChannels");
                 });
 

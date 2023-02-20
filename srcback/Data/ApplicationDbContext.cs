@@ -13,6 +13,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<DeviceParameter> DeviceParameters => Set<DeviceParameter>();
     public DbSet<NetworkChannel> NetworkChannels => Set<NetworkChannel>();
     public DbSet<ModbusChannel> ModbusChannels => Set<ModbusChannel>();
+    public DbSet<Meterage> Meterages => Set<Meterage>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

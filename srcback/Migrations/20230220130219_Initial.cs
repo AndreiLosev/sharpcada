@@ -83,6 +83,27 @@ namespace sharpcada.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Meterages",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Value = table.Column<string>(type: "text", nullable: false),
+                    DeviceParameterID = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Meterages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Meterages_DeviceParameters_DeviceParameterID",
+                        column: x => x.DeviceParameterID,
+                        principalTable: "DeviceParameters",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "DeviceParameterNetworkChannel",
                 columns: table => new
                 {
@@ -145,6 +166,11 @@ namespace sharpcada.Migrations
                 column: "DeviceId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Meterages_DeviceParameterID",
+                table: "Meterages",
+                column: "DeviceParameterID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_NetworkChannelDeviceParameter_DeviceParameterId",
                 table: "NetworkChannelDeviceParameter",
                 column: "DeviceParameterId");
@@ -165,6 +191,9 @@ namespace sharpcada.Migrations
         {
             migrationBuilder.DropTable(
                 name: "DeviceParameterNetworkChannel");
+
+            migrationBuilder.DropTable(
+                name: "Meterages");
 
             migrationBuilder.DropTable(
                 name: "NetworkChannelDeviceParameter");

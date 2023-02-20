@@ -14,6 +14,7 @@ public class DeviceParameter : EntityBase
     public Device? Device { get; set; }
     public List<NetworkChannel> NetworkChannels { set; get; } = new();
     public List<NetworkChannelDeviceParameter> ParameterChannels { set; get; } = new();
+    public List<Meterage> Meterages { set; get; } = new();
 }
 
 public enum ParameterType : byte

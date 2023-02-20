@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Design;
 
 namespace sharpcada.Data;
 
-public class ContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
+public class DbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
 {
     public ApplicationDbContext CreateDbContext(string[] args)
     {

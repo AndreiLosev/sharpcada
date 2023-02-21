@@ -88,7 +88,7 @@ checksum = "0717cef1bc8b636c6e1c1bbdefc09e6322da8a9321966e8928ef80d20f7f770f"
 [[package]]
 name = "plc"
 version = "0.1.0"
-source = "git+https://github.com/AndreiLosev/plc#b76733596e56561ece8dbd2e708844e6ab32391e"
+source = "git+https://github.com/AndreiLosev/plc#c59db11cdfdbfcc6fe975dd19270402c1cfd501a"
 dependencies = [
  "ansi_term",
  "rmodbus",

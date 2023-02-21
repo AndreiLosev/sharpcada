@@ -23,8 +23,7 @@ impl OutsideTemperature {
 
         if dt % 1000 < 50 {
             let temp = context.get_outside_temperature()?;
-            let dt = self.time.elapsed().as_secs_f32() / 20.0;
-            println!("t: {}, sin: {}", temp, dt.sin());
+            println!("OutsideTemperature: {}", temp);
         }
         Ok(())
     }

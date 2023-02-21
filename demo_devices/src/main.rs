@@ -1,9 +1,13 @@
 mod outside_temperature;
 mod mb_context;
 mod tank_logic;
+mod physics;
+mod cooling;
 
 use crate::outside_temperature::OutsideTemperature;
 use crate::tank_logic::{TankLogic, TANK_LOW_LEVEL};
+use crate::cooling::Cooling;
+use crate::physics::Physics;
 use plc::Plc;
 use plc::task::Task;
 use plc::task::Program;
@@ -15,10 +19,14 @@ static DEBUG_LOG: bool = true;
 fn main() {
     let outside_temperature = OutsideTemperature::new();
     let mut tank_logic = TankLogic::new();
+    let mut coller = Cooling::new();
+    let mut physics = Physics::new();
 
     let mut programs = [
         Program::Const(&outside_temperature),
         Program::Mut(&mut tank_logic),
+        Program::Mut(&mut coller),
+        Program::Mut(&mut physics),
     ];
 
     let cycle = std::time::Duration::from_millis(100);

@@ -1,6 +1,7 @@
 use plc::task::MutProgram;
 use crate::mb_context::{AppResult, MbContext};
 use crate::cooling::{AIR_FLOW, COLLER_POWER};
+use crate::DEBUG_LOG;
 
 pub const HEAT_IRRADIATION: f32 = 0.5;
 pub const THERMAL_CAPACITY: f32 = 400.0;
@@ -77,7 +78,6 @@ impl Physics {
         let supply_air = context.get_supply_air_temperature()?;
         let outside_temp = context.get_outside_temperature()?;
         let active_cooling = context.get_active_cooling_state()?;
-
         if !active_cooling {
             let new_supply_air = if supply_air < outside_temp {
                 supply_air + 0.07
@@ -86,6 +86,7 @@ impl Physics {
             };
 
             context.set_supply_air_temperature(new_supply_air)?;
+            return Ok(());
         }
 
         let cooling_temp = outside_temp - (COLLER_POWER * 3600.0 / (1.2 * AIR_FLOW));
@@ -115,6 +116,29 @@ impl Physics {
 
         Ok(())
     }
+
+    fn log(&self, context: &mut plc::ModbusContext) -> AppResult<()> {
+
+        if !DEBUG_LOG {
+            return Ok(());
+        }
+    
+        let t = std::time::SystemTime::now();
+        let since_the_epoch = t
+            .duration_since(std::time::UNIX_EPOCH)
+            .expect("Time went backwards");
+
+        if (since_the_epoch.as_millis() % 1000) < 100 {
+
+            let in_t = context.get_inside_temperature()?;
+            let tank_t = context.get_tank_temperature()?;
+            let supply_t = context.get_supply_air_temperature()?;
+            println!("inT: {}, tankT: {}, supplyT: {}", in_t, tank_t, supply_t);
+        }
+        
+        Ok(())
+    }
+
 }
 
 impl MutProgram for Physics {
@@ -122,7 +146,7 @@ impl MutProgram for Physics {
         self.tank_level_handler(context)?;
         self.tank_temperature_handler(context)?;
         self.calc_inside_temperature(context)?;
-
+        self.log(context)?;
         Ok(())
     }
 }

@@ -1,6 +1,7 @@
 use plc::task::MutProgram;
 use crate::mb_context::{MbContext, AppResult};
 use plc::pls_std::Rs;
+use crate::DEBUG_LOG;
 
 pub const SET_POINT_TEMP: f32 = 28.0;
 pub const AIR_FLOW: f32 = 10000.0;
@@ -45,13 +46,34 @@ impl Cooling {
 
         Ok(())
     }
+
+    fn log(&self, context: &mut plc::ModbusContext) -> AppResult<()> {
+
+        if !DEBUG_LOG {
+            return Ok(());
+        }
+    
+        let t = std::time::SystemTime::now();
+        let since_the_epoch = t
+            .duration_since(std::time::UNIX_EPOCH)
+            .expect("Time went backwards");
+
+        if (since_the_epoch.as_millis() % 1000) < 100 {
+
+            let active = context.get_active_cooling_state()?;
+            let passive = context.get_passive_cooling_state()?;
+            println!("Cooler: active {}, passive: {}", active, passive);
+        }
+        
+        Ok(())
+    }
 }
 
 impl MutProgram for Cooling {
     fn run(&mut self, context: &mut plc::ModbusContext) -> AppResult<()> {
         self.passiv_cooling(context)?;
         self.active_cooling(context)?;
-
+        self.log(context)?;
         Ok(())
     }
 }

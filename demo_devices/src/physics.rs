@@ -4,6 +4,7 @@ use crate::cooling::{AIR_FLOW, COLLER_POWER};
 
 pub const HEAT_IRRADIATION: f32 = 0.5;
 pub const THERMAL_CAPACITY: f32 = 400.0;
+pub const ROOM_THERMAL_CAPACITY: f32 = 293.0;
 pub const HEATER_POWER: f32 = 50.0;
 
 pub struct Physics {
@@ -106,6 +107,11 @@ impl Physics {
     ) -> AppResult<()> {
         self.calc_supplay_air(context)?;
         self.calc_q_coolor(context)?;
+
+        let temp = context.get_inside_temperature()?;
+
+        let new_temp = temp + (self.q_from_tank - self.q_cooler) / ROOM_THERMAL_CAPACITY;
+        context.set_inside_temperature(new_temp)?;
 
         Ok(())
     }

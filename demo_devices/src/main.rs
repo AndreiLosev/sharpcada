@@ -49,5 +49,9 @@ fn init_context() -> ModbusContext {
 
     context.set_tank_temperature(init_outside_temperature + 5.0).unwrap();
 
+    context.set_inside_temperature(init_outside_temperature + 5.0).unwrap();
+
+    context.set_supply_air_temperature(init_outside_temperature).unwrap();
+
     context
 }

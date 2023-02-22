@@ -34,6 +34,9 @@ pub trait MbContext {
 
     fn get_inside_temperature(&self) -> AppResult<f32>;
     fn set_inside_temperature(&mut self, value: f32) -> AppResult<()>;
+
+    fn get_supply_air_temperature(&self) -> AppResult<f32>;
+    fn set_supply_air_temperature(&mut self, value: f32) -> AppResult<()>;
 }
 
 impl MbContext for ModbusContext {
@@ -152,6 +155,16 @@ impl MbContext for ModbusContext {
 
     fn set_inside_temperature(&mut self, value: f32) -> AppResult<()> {
         self.set_holdings_from_f32(7, value)?;
+        Ok(())
+    }
+
+    fn get_supply_air_temperature(&self) -> AppResult<f32> {
+        let result = self.get_holdings_as_f32(9)?;
+        Ok(result)
+    }
+
+    fn set_supply_air_temperature(&mut self, value: f32) -> AppResult<()> {
+        self.set_holdings_from_f32(9, value)?;
         Ok(())
     }
 }

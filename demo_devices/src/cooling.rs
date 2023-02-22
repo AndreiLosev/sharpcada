@@ -4,6 +4,7 @@ use plc::pls_std::Rs;
 
 pub const SET_POINT_TEMP: f32 = 28.0;
 pub const AIR_FLOW: f32 = 10000.0;
+pub const COLLER_POWER: f32 = 60.0;
 
 pub struct Cooling {
     passiv_cooling: Rs,

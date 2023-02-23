@@ -1,27 +1,12 @@
+using sharpcada;
+using sharpcada.Api;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddHostedService<Worker>();
+
 var app = builder.Build();
+app.SetConfiguration();
+app.RunApp();
 
-var db1 = 0;
-
-app.MapGet("/get", (IConfiguration appConfig) => 
-{
-    db1 += 1;
-    return $"Hello World! => {db1}";
-});
-
-
-RunApp(app);
-
-static void RunApp(WebApplication app)
-{
-    var appConfig = app.Services.GetService<IConfiguration>();
-
-    if (appConfig is null)
-    {
-        throw new Exception();
-    }
-
-    var appPort = appConfig["APP_PORT"];
-    app.Run($"http://+:{appPort}");
-}
 

@@ -24,7 +24,7 @@ elif [ -n "$1" ]; then
         mcr.microsoft.com/dotnet/sdk:7.0 dotnet build
 else
     echo ">>>  local compilation  <<<"
-    dotnet build
+    dotnet build $SCRIPTPATH/../srcback/sharpcada.csproj
 fi
 
 if [ -n "$IS_RUNNING" ]; then

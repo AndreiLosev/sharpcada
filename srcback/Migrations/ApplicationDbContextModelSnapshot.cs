@@ -206,6 +206,9 @@ namespace sharpcada.Migrations
                     b.Property<byte>("FunctionCode")
                         .HasColumnType("smallint");
 
+                    b.Property<bool>("IsLittleEndian")
+                        .HasColumnType("boolean");
+
                     b.Property<int?>("Length")
                         .HasColumnType("integer");
 

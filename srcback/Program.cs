@@ -1,12 +1,10 @@
 using sharpcada;
 using sharpcada.Api;
+using sharpcada.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.AddDataBaseContext();
 
 builder.Services.AddHostedService<Worker>();
 
-var app = builder.Build();
-app.SetConfiguration();
-app.RunApp();
-
-
+builder.RunApp();

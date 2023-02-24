@@ -12,8 +12,8 @@ using sharpcada.Data;
 namespace sharpcada.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230220130219_Initial")]
-    partial class Initial
+    [Migration("20230224152456_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -208,6 +208,9 @@ namespace sharpcada.Migrations
 
                     b.Property<byte>("FunctionCode")
                         .HasColumnType("smallint");
+
+                    b.Property<bool>("IsLittleEndian")
+                        .HasColumnType("boolean");
 
                     b.Property<int?>("Length")
                         .HasColumnType("integer");

@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace sharpcada.Data.Entities;
 
+[Table("ModbusChannel")]
 public class ModbusChannel : NetworkChannel
 {
     public ushort DeviceAddres { set; get; }
@@ -9,6 +11,7 @@ public class ModbusChannel : NetworkChannel
     public ModbusFunctionCode FunctionCode { set; get; }
     public ushort Port { get; set; }
     public ushort? Length { set; get; }
+    public bool IsLittleEndian { set; get; }
 }
 
 public enum ModbusFunctionCode : byte
@@ -45,5 +48,10 @@ public static class ModelBuilderForModbusChannelExtension
             .Property(m => m.FunctionCode)
             .IsRequired()
             .HasDefaultValue(ModbusFunctionCode.ReadHoldingRegisters);
+
+        modelBuilder.Entity<ModbusChannel>()
+            .Property(m => m.IsLittleEndian)
+            .IsRequired()
+            .HasDefaultValue(true);
     }
 }

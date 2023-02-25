@@ -18,13 +18,13 @@ if [ -n "$CONTAINER_IS_EXISTS" ] && [ -n "$1" ]; then
 elif [ -n "$1" ]; then
     echo ">>>  compilation in a container  <<<"
     docker run \
-        -v ${SCRIPTPATH}/../srcback/:/home/andrei/prog/sharpcada/srcback/ -it \
-        -w /home/andrei/prog/sharpcada/srcback/ \
+        -v ${SCRIPTPATH}/../:/home/andrei/prog/sharpcada/ -it \
+        -w /home/andrei/prog/sharpcada/ \
         --name $CONTAINER_NAME \
-        mcr.microsoft.com/dotnet/sdk:7.0 dotnet build
+        mcr.microsoft.com/dotnet/sdk:7.0 dotnet build ./sharpcada.sln
 else
     echo ">>>  local compilation  <<<"
-    dotnet build $SCRIPTPATH/../srcback/sharpcada.csproj
+    dotnet build $SCRIPTPATH/../sharpcada.sln
 fi
 
 if [ -n "$IS_RUNNING" ]; then

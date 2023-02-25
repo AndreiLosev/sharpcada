@@ -4,7 +4,7 @@ namespace sharpcada.Api;
 
 public static class ConfigurationWebApplicationExtensions
 {
-    public static void RunApp(this WebApplicationBuilder builder)
+    public static void RunWebApi(this WebApplicationBuilder builder)
     {
 
         var appConfig = builder.Configuration.CheckConfig();
@@ -17,16 +17,7 @@ public static class ConfigurationWebApplicationExtensions
             app.UseDeveloperExceptionPage();
         }
 
-        app.SetConfiguration();
-
+        app.MapControllers();
         app.Run($"http://+:{appPort}");
-    }
-
-    private static void SetConfiguration(this WebApplication app)
-    {
-        app.MapGet("/get", (IConfiguration appConfig) => 
-        {
-            return "Hello World! => db1";
-        });       
     }
 }

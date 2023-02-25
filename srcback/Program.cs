@@ -4,7 +4,5 @@ using sharpcada.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.AddDataBaseContext();
-
 builder.Services.AddHostedService<Worker>();
-
-builder.RunApp();
+builder.RunWebApi();

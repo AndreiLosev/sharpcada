@@ -6,8 +6,8 @@ public class NetworkChannel : EntityBase
 {
     public long DeviceId { get; set; }
     public Device? Device { get; set; }
-    public List<DeviceParameter> DeviceParameters { get; set; } = new();
-    public List<DeviceParameterNetworkChannel> DeviceParameterNetworkChannels { get; set; } = new();
+    public ICollection<DeviceParameter> DeviceParameters { get; set; } = null!;
+    public List<DevParameterNetChannel> DevParameterNetChannels { get; set; } = null!;
 }
 
 public static class ModelBuilderForNetworkChannelExtension

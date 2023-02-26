@@ -12,9 +12,9 @@ public class DeviceParameter : EntityBase
     public float CastB { get; set; }
     public long DeviceId { get; set; }
     public Device? Device { get; set; }
-    public List<NetworkChannel> NetworkChannels { set; get; } = new();
-    public List<NetworkChannelDeviceParameter> ParameterChannels { set; get; } = new();
     public List<Meterage> Meterages { set; get; } = new();
+    public List<NetworkChannel> NetworkChannels { set; get; } = new();
+    public List<DeviceParameterNetworkChannel> DeviceParameterNetworkChannels { set; get; } = new();
 }
 
 public enum ParameterType : byte

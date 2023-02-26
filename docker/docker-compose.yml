@@ -25,6 +25,7 @@ services:
       - ../.env
     environment:
       - APP_PORT=${APP_PORT}
+      - APP_ENV=${APP_ENV}
     networks:
       - internal
   db:

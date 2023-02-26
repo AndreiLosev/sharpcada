@@ -1,23 +1,24 @@
 using sharpcada.Exception;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+// using sharpcada.Data.Repositories;
 
 namespace sharpcada.Data;
 
 public static class DatabaseContextExtensions
 {
-    public static void AddDataBaseContext(this WebApplicationBuilder builder)
+    public static void RegistrationDbServices(this WebApplicationBuilder builder)
     {
         var appConfig = builder.Configuration.CheckConfig();      
         var connectionString = appConfig.GetValue<string>("DB_CONNECTION_STRING");
 
         builder.Services.AddDbContext<ApplicationDbContext>(o => o.UseNpgsql(connectionString));
 
-        builder.Services.AddScoped<Repositories.DeviceRepositories>();
-        // AddRepositoriesToContainer(builder);
+        var conteiner = builder.Services;
+        AddRepositoriesToContainer(ref conteiner);
     }
 
-    private static void AddRepositoriesToContainer(WebApplicationBuilder builder)
+    private static void AddRepositoriesToContainer(ref IServiceCollection conteiner)
     {
         var assembly = Assembly.GetExecutingAssembly();
         var iterfaceType = typeof(Repositories.Contracts.IBaseRepository);
@@ -28,7 +29,7 @@ public static class DatabaseContextExtensions
 
         foreach (var type in types)
         {
-            builder.Services.AddScoped(type);
+            conteiner.AddTransient(type);
         }
     }
 }

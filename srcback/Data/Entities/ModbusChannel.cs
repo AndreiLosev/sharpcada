@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace sharpcada.Data.Entities;
 
-[Table("ModbusChannel")]
+[Table("ModbusChannels")]
 public class ModbusChannel : NetworkChannel
 {
     public ushort DeviceAddres { set; get; }
@@ -11,7 +11,7 @@ public class ModbusChannel : NetworkChannel
     public ModbusFunctionCode FunctionCode { set; get; }
     public ushort Port { get; set; }
     public ushort? Length { set; get; }
-    public bool IsLittleEndian { set; get; }
+    public ByteOrder ByteOrder { set; get; }
 }
 
 public enum ModbusFunctionCode : byte
@@ -24,6 +24,12 @@ public enum ModbusFunctionCode : byte
     ForceSingleRegister = 6,
     ForceMultipleCoils = 15,
     PresetMultipleRegisters = 16,
+}
+
+public enum ByteOrder : byte
+{
+    LittleEndian = 1,
+    BigEndian = 2,
 }
 
 public static class ModelBuilderForModbusChannelExtension
@@ -50,8 +56,8 @@ public static class ModelBuilderForModbusChannelExtension
             .HasDefaultValue(ModbusFunctionCode.ReadHoldingRegisters);
 
         modelBuilder.Entity<ModbusChannel>()
-            .Property(m => m.IsLittleEndian)
+            .Property(m => m.ByteOrder)
             .IsRequired()
-            .HasDefaultValue(true);
+            .HasDefaultValue(ByteOrder.LittleEndian);
     }
 }

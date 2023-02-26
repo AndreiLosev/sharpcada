@@ -57,10 +57,5 @@ fn init_context() -> ModbusContext {
     context.set_inside_temperature(init_outside_temperature + 5.0).unwrap();
     context.set_supply_air_temperature(init_outside_temperature).unwrap();
 
-    context.set_holdings_from_u32(100, 99999).unwrap();
-    
-    let arr = 99999_u32.to_reg();
-    context.set_holdings_bulk(100, &arr).unwrap();
-
     context
 }

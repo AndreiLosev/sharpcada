@@ -25,8 +25,8 @@ public class ApplicationDbContext : DbContext
         modelBuilder.SetPropetyToDeviceEntity();
         modelBuilder.SetPropetyToDeviceParameterEntity();
         modelBuilder.SetPropetyToNetworkChannelEntity();
-        modelBuilder.SetPropetyToModbusChannelEntity();
         modelBuilder.SetPropetyToNetworkChannelDeviceParameterEntity();
+        modelBuilder.SetPropetyToModbusChannelEntity();
     }
 
     public override int SaveChanges()

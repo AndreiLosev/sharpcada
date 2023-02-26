@@ -8,16 +8,16 @@ public static class ConfigurationWebApplicationExtensions
     {
 
         var appConfig = builder.Configuration.CheckConfig();
-        var appPort = appConfig.GetValue<string>("APP_PORT");
         builder.Services.AddControllers();
-
         var app = builder.Build();
+    
         if (appConfig.GetValue<string>("APP_ENV") == "dev")
         {
             app.UseDeveloperExceptionPage();
         }
 
         app.MapControllers();
+        var appPort = appConfig.GetValue<string>("APP_PORT");
         app.Run($"http://+:{appPort}");
     }
 }

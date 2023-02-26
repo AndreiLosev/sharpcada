@@ -11,9 +11,18 @@ public abstract class BaseRepository<TEntity> where TEntity : class
         _dbContext = dbContext;
     }
 
-    public async Task<TEntity?> GetByIdAsync(long id) =>
+    public virtual async Task<TEntity?> FindAsync(long id) =>
         await _dbContext.FindAsync<TEntity>(id);
 
-    public async Task<List<TEntity>> AllAsync() =>
+    public virtual async Task<List<TEntity>> AllAsync() =>
         await _dbContext.Set<TEntity>().ToListAsync();
+
+    public virtual void Create(TEntity entity) =>
+        _dbContext.Add<TEntity>(entity);
+
+    public virtual void Update(TEntity entity) =>
+        _dbContext.Update<TEntity>(entity); 
+
+    public virtual void Delete(TEntity entity) =>
+        _dbContext.Set<TEntity>().Remove(entity);
 }

@@ -1,7 +1,6 @@
 using sharpcada.Exception;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
-// using sharpcada.Data.Repositories;
 
 namespace sharpcada.Data;
 
@@ -20,16 +19,18 @@ public static class DatabaseContextExtensions
 
     private static void AddRepositoriesToContainer(ref IServiceCollection conteiner)
     {
+        var folderNamespace = typeof(DatabaseContextExtensions).Namespace
+            ?? throw new System.Exception("This will never happen");
+
         var assembly = Assembly.GetExecutingAssembly();
-        var iterfaceType = typeof(Repositories.Contracts.IBaseRepository);
+        var iterfaceType = typeof(Repositories.Contracts.IRepository);
         var types = assembly.GetTypes()
-            .Where(a => a.Namespace is string && a.Namespace.StartsWith("sharpcada.Data"))
-            .Where(a => a.IsAssignableTo(iterfaceType) && a.IsClass && !a.IsAbstract)
-        ;
+            .Where(a => a.Namespace is string && a.Namespace.StartsWith(folderNamespace))
+            .Where(a => a.IsAssignableTo(iterfaceType) && a.IsClass && !a.IsAbstract);
 
         foreach (var type in types)
         {
-            conteiner.AddTransient(type);
+            conteiner.AddScoped(type);
         }
     }
 }

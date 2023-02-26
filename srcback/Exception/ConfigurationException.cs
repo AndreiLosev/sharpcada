@@ -3,13 +3,11 @@ namespace sharpcada.Exception;
 [System.Serializable]
 public class ConfigurationException : System.Exception
 {
-    public ConfigurationException(
-        string message = "Configuration missing from service container") : base(message) { }
+    public ConfigurationException()
+        : base("configuration missing from service container") { }
 
-    public ConfigurationException(
-        System.Exception inner,
-        string message = "Configuration missing from service container")
-        : base(message, inner) { }
+    public ConfigurationException(System.Exception inner)
+        : base("Configuration missing from service container", inner) { }
 
     protected ConfigurationException(
         System.Runtime.Serialization.SerializationInfo info,

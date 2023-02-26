@@ -4,7 +4,6 @@ mod tank_logic;
 mod physics;
 mod cooling;
 
-use plc::pls_std::ToReg;
 use crate::outside_temperature::OutsideTemperature;
 use crate::tank_logic::{TankLogic, TANK_LOW_LEVEL};
 use crate::cooling::Cooling;

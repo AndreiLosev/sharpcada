@@ -6,9 +6,9 @@ namespace sharpcada.Api.Settings.Controllers;
 
 public class TestController : BaseControllers
 {
-    private DeviceRepository _test;
+    private DevicesRepository _test;
 
-    public TestController(DeviceRepository test)
+    public TestController(DevicesRepository test)
     {
         _test = test;
     }

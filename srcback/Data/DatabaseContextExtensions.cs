@@ -6,7 +6,7 @@ namespace sharpcada.Data;
 
 public static class DatabaseContextExtensions
 {
-    public static void RegistrationDbServices(this WebApplicationBuilder builder)
+    public static void RegistrationDAL(this WebApplicationBuilder builder)
     {
         var appConfig = builder.Configuration.CheckConfig();      
         var connectionString = appConfig.GetValue<string>("DB_CONNECTION_STRING");

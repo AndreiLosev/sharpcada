@@ -2,13 +2,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace sharpcada.Data.Entities;
 
-public class Device : EntityBase
+public class Device : EntityBaseWhitDate
 {
     public string Name { get; set; } = null!;
     public string IpAddres { get; set; } = null!;
     public NetworkProtocol Protocol { get; set; }
-    public List<DeviceParameter> Parameters { get; set; } = new();
-    public List<NetworkChannel> NetworkChannels { get; set; } = new();
+    public ICollection<DeviceParameter>? Parameters { get; set; }
+    public ICollection<NetworkChannel>? NetworkChannels { get; set; }
 }
 
 public enum NetworkProtocol: byte

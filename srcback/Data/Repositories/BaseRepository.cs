@@ -1,28 +1,13 @@
 using Microsoft.EntityFrameworkCore;
+using sharpcada.Data.Entities;
 
 namespace sharpcada.Data.Repositories;
 
-public abstract class BaseRepository<TEntity> where TEntity : class
+public abstract class BaseRepository<TEntity> : SimpleBaseRepository<TEntity>
+    where TEntity : EntityBase
 {
-    protected readonly ApplicationDbContext _dbContext;
+    public BaseRepository(ApplicationDbContext dbContext) : base(dbContext) {}
 
-    public BaseRepository(ApplicationDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
-
-    public virtual async Task<List<TEntity>> AllAsync() =>
-        await _dbContext.Set<TEntity>().ToListAsync();
-
-    public virtual void Create(TEntity entity) =>
-        _dbContext.Add<TEntity>(entity);
-
-    public virtual void Update(TEntity entity) =>
-        _dbContext.Update<TEntity>(entity); 
-
-    public virtual void Delete(TEntity entity) =>
-        _dbContext.Set<TEntity>().Remove(entity);
-
-    public async Task Save() =>
-        await _dbContext.SaveChangesAsync();
+    public async Task<ICollection<TEntity>> GetAsync(ICollection<long> ids) =>
+        await _dbContext.Set<TEntity>().Where(e => ids.Contains(e.Id)).ToListAsync();
 }

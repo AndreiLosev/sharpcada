@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace sharpcada.Data.Entities;
 
-public class DeviceParameter : EntityBase
+public class DeviceParameter : EntityBaseWhitDate
 {
     public string Name { get; set; } = "";
     public string? Unit { get; set; }
@@ -12,9 +12,9 @@ public class DeviceParameter : EntityBase
     public float CastB { get; set; }
     public long DeviceId { get; set; }
     public Device? Device { get; set; }
-    public List<Meterage> Meterages { set; get; } = new();
-    public ICollection<NetworkChannel> NetworkChannels { set; get; } = null!;
-    public List<DevParameterNetChannel> DevParameterNetChannels { set; get; } = new();
+    public ICollection<Meterage>? Meterages { set; get; }
+    public ICollection<NetworkChannel>? NetworkChannels { set; get; }
+    public ICollection<DevParameterNetChannel>? DevParameterNetChannels { set; get; }
 }
 
 public enum ParameterType : byte

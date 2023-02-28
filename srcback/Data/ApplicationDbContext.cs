@@ -48,12 +48,12 @@ public class ApplicationDbContext : DbContext
 
         foreach (var entity in ChangeTracker.Entries())
         {
-            if (entity.Entity is not EntityBase)
+            if (entity.Entity is not EntityBaseWhitDate)
             {
                 continue;
             }
 
-            var baseEntity = (EntityBase)entity.Entity;
+            var baseEntity = (EntityBaseWhitDate)entity.Entity;
             if (entity.State == EntityState.Added)
             {
                 baseEntity.CreatedAt = DateTime.Now;

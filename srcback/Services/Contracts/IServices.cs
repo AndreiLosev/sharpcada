@@ -1,3 +1,3 @@
-namespace srcback.Services.Contracts;
+namespace sharpcada.Services.Contracts;
 
 public interface IServices {}

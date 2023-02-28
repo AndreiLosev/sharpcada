@@ -1,5 +1,6 @@
 using sharpcada.Data.Repositories;
 using sharpcada.Data.Entities;
+using System.Text.Json;
 
 namespace sharpcada.Services.DataAcquisition;
 
@@ -29,29 +30,67 @@ public class DataCollectionSettings : Contracts.IServices
         }
     }
 
-    public uint DataAcquisitionPeriod
+    public uint DataAcquisitionPeriodSecond
     {
         get
         {
-            var res = this.findSettingOrDefault("DataAcquisitionPeriod", "10");
+            var res = this.findSettingOrDefault("DataAcquisitionPeriodSecond", "10");
             return Convert.ToUInt32(res);
         }
         set
         {
-            this.setSetting("DataAcquisitionPeriod", value.ToString());
+            this.setSetting("DataAcquisitionPeriodSecond", value.ToString());
         }
     }
 
-    public uint MaxPeriodCheckSettings
+    public uint ConfigPeriodCheckSecond
     {
         get
         {
-            var res = this.findSettingOrDefault("MaxPeriodCheckSettings", "600");
+            var res = this.findSettingOrDefault("ConfigPeriodCheckSecond", "300");
             return Convert.ToUInt32(res);
         }
         set
         {
-            this.setSetting("MaxPeriodCheckSettings", value.ToString());
+            this.setSetting("ConfigPeriodCheckSecond", value.ToString());
+        }
+    }
+
+    public ICollection<long>? DevicesUsed
+    {
+        get
+        {
+            var strRes = this.findSettingOrDefault("DevicesUsed", "");
+            ICollection<long>? res;
+    
+            try
+            {
+                res = JsonSerializer.Deserialize<ICollection<long>>(strRes);
+            }
+            catch(JsonException)
+            {
+                res = null;
+            }
+
+            return res;
+        }
+        set
+        {
+            if (value is null)
+            {
+                this.setSetting("DevicesUsed", "");
+                return;
+            }
+
+            try
+            {
+                var res = JsonSerializer.Serialize<ICollection<long>>(value);
+                this.setSetting("DevicesUsed", res);
+            }
+            catch(JsonException)
+            {
+                this.setSetting("DevicesUsed", "");
+            }
         }
     }
 

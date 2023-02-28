@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
+using sharpcada.Core;
 
 namespace sharpcada.Data.Entities;
 
@@ -12,24 +13,6 @@ public class ModbusChannel : NetworkChannel
     public ushort Port { get; set; }
     public ushort? Length { set; get; }
     public ByteOrder ByteOrder { set; get; }
-}
-
-public enum ModbusFunctionCode : byte
-{
-    ReadCoil = 1,
-    ReadInput = 2,
-    ReadHoldingRegisters = 3,
-    ReadInputRegisters = 4,
-    ForceSingleCoil = 5,
-    ForceSingleRegister = 6,
-    ForceMultipleCoils = 15,
-    PresetMultipleRegisters = 16,
-}
-
-public enum ByteOrder : byte
-{
-    LittleEndian = 1,
-    BigEndian = 2,
 }
 
 public static class ModelBuilderForModbusChannelExtension

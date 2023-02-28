@@ -1,4 +1,4 @@
-
+using sharpcada.Core;
 using Microsoft.EntityFrameworkCore;
 
 namespace sharpcada.Data.Entities;
@@ -15,21 +15,6 @@ public class DeviceParameter : EntityBaseWhitDate
     public ICollection<Meterage>? Meterages { set; get; }
     public ICollection<NetworkChannel>? NetworkChannels { set; get; }
     public ICollection<DevParameterNetChannel>? DevParameterNetChannels { set; get; }
-}
-
-public enum ParameterType : byte
-{
-    Bool = 0,
-    Int8 = 1,
-    Int16 = 2,
-    Int32 = 3,
-    Int64 = 4,
-    Uint8 = 5,
-    Uint16 = 6,
-    Uint32 = 7,
-    Uint64 = 8,
-    Float32 = 9,
-    Float64 = 10,
 }
 
 public static class ModelBuilderForDeviceParameterExtension

@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using sharpcada.Core;
 
 namespace sharpcada.Data.Entities;
 
@@ -9,12 +10,6 @@ public class Device : EntityBaseWhitDate
     public NetworkProtocol Protocol { get; set; }
     public ICollection<DeviceParameter>? Parameters { get; set; }
     public ICollection<NetworkChannel>? NetworkChannels { get; set; }
-}
-
-public enum NetworkProtocol: byte
-{
-    Modbus = 0,
-    ProfiNet = 1,
 }
 
 public static class ModelBuilderForDeviceExtension

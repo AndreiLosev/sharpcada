@@ -1,4 +1,5 @@
 using EntityModbusChanel = sharpcada.Data.Entities.ModbusChannel;
+using sharpcada.Core.Enams;
 
 namespace sharpcada.Core;
 

@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using sharpcada.Core;
+using sharpcada.Core.Enams;
 
 namespace sharpcada.Data.Entities;
 

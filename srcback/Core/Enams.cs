@@ -1,4 +1,4 @@
-namespace sharpcada.Core;
+namespace sharpcada.Core.Enams;
 
 public enum NetworkProtocol: byte
 {
@@ -8,14 +8,14 @@ public enum NetworkProtocol: byte
 
 public enum ModbusFunctionCode : byte
 {
-    ReadCoil = 1,
-    ReadInput = 2,
+    ReadCoils = 1,
+    ReadInputs = 2,
     ReadHoldingRegisters = 3,
     ReadInputRegisters = 4,
-    ForceSingleCoil = 5,
-    ForceSingleRegister = 6,
-    ForceMultipleCoils = 15,
-    PresetMultipleRegisters = 16,
+    WriteSingleCoil = 5,
+    WriteSingleRegister = 6,
+    WriteMultipleCoils = 15,
+    WriteMultipleRegisters = 16,
 }
 
 public enum ByteOrder : byte

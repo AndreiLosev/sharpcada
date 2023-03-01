@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
-using sharpcada.Core;
+using sharpcada.Core.Enams;
 
 namespace sharpcada.Data.Entities;
 

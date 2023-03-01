@@ -9,14 +9,17 @@ namespace sharpcada.Api.Settings.Controllers;
 public class TestController : BaseControllers
 {
     private DevicesRepository _test;
-    public NetworkChannelRepository _ncr;
+    private NetworkChannelRepository _ncr;
+    private sharpcada.Worker _work;
 
     public TestController(
             DevicesRepository test,
-            NetworkChannelRepository ncr)
+            NetworkChannelRepository ncr,
+            sharpcada.Worker work)
     {
         _test = test;
         _ncr = ncr;
+        _work = work;
     }
 
     [HttpGet, Route("/get")]
@@ -24,6 +27,8 @@ public class TestController : BaseControllers
     {
         var dev = await _test.GetAsync();
         await _ncr.LoadFor(dev);
+
+        _work.setCounter(999);
 
         var mc = dev
             .Select(d => d.NetworkChannels)

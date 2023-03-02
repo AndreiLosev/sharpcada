@@ -1,5 +1,6 @@
 using EnitityDeviceParametr = sharpcada.Data.Entities.DeviceParameter;
 using sharpcada.Core.Enams;
+using sharpcada.Core.DTO;
 
 namespace sharpcada.Core;
 
@@ -10,12 +11,12 @@ public struct DeviceParameter
     private ParameterType _type;
     private float _castK;
     private float _castB;
-    private object? _vlaue;
-    private Func<byte[], object> _convertToBytes;
+    private float? _vlaue;
+    private Func<ForNetworkChnel> _convertToBytes;
 
     public DeviceParameter(
         EnitityDeviceParametr deviceParament,
-        Func<byte[], object> convertToBytes)
+        Func<ForNetworkChnel> convertToBytes)
     {
         _name = deviceParament.Name;
         _unit = deviceParament.Unit;

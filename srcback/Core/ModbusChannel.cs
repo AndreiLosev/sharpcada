@@ -19,13 +19,13 @@ public struct ModbusChannel : Contracts.INetworkChannel<Modbus>
         EntityModbusChanel chanel,
         Func<object, byte[]> convertToDevParamValue)
     {
-        _deviceAddres = chanel.DeviceAddres;
-        _dataAddres = chanel.DataAddres;
-        _functionCode = chanel.FunctionCode;
-        _port = chanel.Port;
-        _length = chanel.Length;
-        _byteOrder = chanel.ByteOrder;
-        _convertToDevParamValue = convertToDevParamValue;
+        // _deviceAddres = chanel.DeviceAddres;
+        // _dataAddres = chanel.DataAddres;
+        // _functionCode = chanel.FunctionCode;
+        // _port = chanel.Port;
+        // _length = chanel.Length;
+        // _byteOrder = chanel.ByteOrder;
+        // _convertToDevParamValue = convertToDevParamValue;
     }
 
     public async Task<byte[]> ReadAsync(Modbus client)

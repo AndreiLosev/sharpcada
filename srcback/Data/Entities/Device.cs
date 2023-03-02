@@ -32,6 +32,9 @@ public static class ModelBuilderForDeviceExtension
         modelBuilder.Entity<Device>()
             .Property(d => d.Protocol)
             .IsRequired();
+
+        modelBuilder.Entity<Device>()
+            .UseTptMappingStrategy();
     }
 }
 

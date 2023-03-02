@@ -4,10 +4,10 @@ using EntityDevice = sharpcada.Data.Entities.Device;
 
 namespace srcback.Core.Factories;
 
-class DeviceFactory<T> : ICoreFactory<Device<T>, EntityDevice>
-{
-    public Device<T> Create(EntityDevice entity)
-    {
+// class DeviceFactory<T> : ICoreFactory<Device<T>, EntityDevice>
+// {
+//     public Device<T> Create(EntityDevice entity)
+//     {
 
-    }
-}
+//     }
+// }

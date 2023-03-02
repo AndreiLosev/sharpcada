@@ -86,6 +86,8 @@ namespace sharpcada.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Devices");
+
+                    b.UseTptMappingStrategy();
                 });
 
             modelBuilder.Entity("sharpcada.Data.Entities.DeviceParameter", b =>
@@ -193,26 +195,33 @@ namespace sharpcada.Migrations
                     b.ToTable("Settings");
                 });
 
-            modelBuilder.Entity("sharpcada.Data.Entities.ModbusChannel", b =>
+            modelBuilder.Entity("sharpcada.Data.Entities.ModbusDevice", b =>
                 {
-                    b.HasBaseType("sharpcada.Data.Entities.NetworkChannel");
+                    b.HasBaseType("sharpcada.Data.Entities.Device");
 
                     b.Property<byte>("ByteOrder")
                         .HasColumnType("smallint");
 
-                    b.Property<long>("DataAddres")
-                        .HasColumnType("bigint");
-
                     b.Property<int>("DeviceAddres")
                         .HasColumnType("integer");
+
+                    b.Property<int>("Port")
+                        .HasColumnType("integer");
+
+                    b.ToTable("ModbusDevice");
+                });
+
+            modelBuilder.Entity("sharpcada.Data.Entities.ModbusChannel", b =>
+                {
+                    b.HasBaseType("sharpcada.Data.Entities.NetworkChannel");
+
+                    b.Property<long>("DataAddres")
+                        .HasColumnType("bigint");
 
                     b.Property<byte>("FunctionCode")
                         .HasColumnType("smallint");
 
                     b.Property<int?>("Length")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Port")
                         .HasColumnType("integer");
 
                     b.ToTable("ModbusChannels");
@@ -281,6 +290,15 @@ namespace sharpcada.Migrations
                         .IsRequired();
 
                     b.Navigation("Device");
+                });
+
+            modelBuilder.Entity("sharpcada.Data.Entities.ModbusDevice", b =>
+                {
+                    b.HasOne("sharpcada.Data.Entities.Device", null)
+                        .WithOne()
+                        .HasForeignKey("sharpcada.Data.Entities.ModbusDevice", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("sharpcada.Data.Entities.ModbusChannel", b =>

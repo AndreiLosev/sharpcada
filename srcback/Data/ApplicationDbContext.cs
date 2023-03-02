@@ -10,6 +10,7 @@ public class ApplicationDbContext : DbContext
         : base(options) {}
 
     public DbSet<Device> Devices => Set<Device>(); 
+    public DbSet<ModbusDevice> ModbusDevices => Set<ModbusDevice>();
     public DbSet<DeviceParameter> DeviceParameters => Set<DeviceParameter>();
     public DbSet<NetworkChannel> NetworkChannels => Set<NetworkChannel>();
     public DbSet<ModbusChannel> ModbusChannels => Set<ModbusChannel>();

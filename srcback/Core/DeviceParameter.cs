@@ -13,13 +13,10 @@ public struct DeviceParameter
     private object? _vlaue;
     private Func<byte[], object> _convertToBytes;
 
-    public long Id {get; set;}
-
     public DeviceParameter(
         EnitityDeviceParametr deviceParament,
         Func<byte[], object> convertToBytes)
     {
-        Id = deviceParament.Id;
         _name = deviceParament.Name;
         _unit = deviceParament.Unit;
         _type = deviceParament.Type;

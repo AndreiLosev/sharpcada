@@ -1,12 +1,11 @@
-using FluentModbus;
 using EntityModbusChanel = sharpcada.Data.Entities.ModbusChannel;
 using ModbusFnCode = sharpcada.Core.Enams.ModbusFunctionCode;
 using sharpcada.Core.Enams;
-using sharpcada.Exception;
+using Modbus = sharpcada.Core.NetworkProtocol.Modbus;
 
 namespace sharpcada.Core;
 
-public struct ModbusChannel : Contracts.INetworkChannel<ModbusTcpClient>
+public struct ModbusChannel : Contracts.INetworkChannel<Modbus>
 {
     private ushort _deviceAddres;
     private uint _dataAddres;
@@ -16,13 +15,10 @@ public struct ModbusChannel : Contracts.INetworkChannel<ModbusTcpClient>
     private ByteOrder _byteOrder;
     private Func<object, byte[]> _convertToDevParamValue;
 
-    public long Id { get; init; }
-
     public ModbusChannel(
         EntityModbusChanel chanel,
         Func<object, byte[]> convertToDevParamValue)
     {
-        Id = chanel.Id;
         _deviceAddres = chanel.DeviceAddres;
         _dataAddres = chanel.DataAddres;
         _functionCode = chanel.FunctionCode;
@@ -32,7 +28,7 @@ public struct ModbusChannel : Contracts.INetworkChannel<ModbusTcpClient>
         _convertToDevParamValue = convertToDevParamValue;
     }
 
-    public async Task<byte[]> ReadAsync(ModbusTcpClient client)
+    public async Task<byte[]> ReadAsync(Modbus client)
     {
         //TODO
         await Task.Delay(1);
@@ -40,7 +36,7 @@ public struct ModbusChannel : Contracts.INetworkChannel<ModbusTcpClient>
         return new byte[] {};
     }
 
-    public async Task WriteAsync(ModbusTcpClient client)
+    public async Task WriteAsync(Modbus client)
     {
         
         await Task.Delay(1);

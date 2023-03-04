@@ -6,9 +6,9 @@ namespace sharpcada.Data.Entities;
 public class DevParameterNetChannel
 {
     public long DeviceParameterId { set; get; }
-    public DeviceParameter? DeviceParameter { set; get; }
+    public DeviceParameter DeviceParameter { set; get; } = null!;
     public long NetworkChannelId { set; get; }
-    public NetworkChannel? NetworkChannel { set; get; }
+    public NetworkChannel NetworkChannel { set; get; } = null!;
     public ushort IndexNumber { set; get; }
     public ushort BitIndexNumber { set; get; }
 }

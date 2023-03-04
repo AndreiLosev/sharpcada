@@ -12,11 +12,11 @@ public struct DeviceParameter
     private float _castK;
     private float _castB;
     private float? _vlaue;
-    private Func<ForNetworkChnel> _convertToBytes;
+    private Func<ForNetworkChunnel> _convertToBytes;
 
     public DeviceParameter(
         EnitityDeviceParametr deviceParament,
-        Func<ForNetworkChnel> convertToBytes)
+        Func<ForNetworkChunnel> convertToBytes)
     {
         _name = deviceParament.Name;
         _unit = deviceParament.Unit;

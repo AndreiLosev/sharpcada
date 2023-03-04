@@ -10,11 +10,11 @@ public class ModbusChannel : Contracts.INetworkChannel<IModbus>
     private uint _dataAddres;
     private ModbusFnCode _functionCode;
     private ushort? _length;
-    private Func<List<ForDeviceParametr>> _whereAndWhatToSend;
+    private Func<byte[], List<ForDeviceParametr>> _whereAndWhatToSend;
 
     public ModbusChannel(
         EntityModbusChanel chanel,
-        Func<List<ForDeviceParametr>> whereAndWhatToSend)
+        Func<byte[], List<ForDeviceParametr>> whereAndWhatToSend)
     {
         _dataAddres = chanel.DataAddres;
         _functionCode = chanel.FunctionCode;

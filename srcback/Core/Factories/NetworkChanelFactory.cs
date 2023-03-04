@@ -10,7 +10,13 @@ public class NetworkChanelFactory : ICoreFactory
 {
     public ModbusChannel Create(EntityModbusChannel channel)
     {
-        var fns = () => new List<ForDeviceParametr>();
+        var prepared = channel.DevParameterNetChannels
+            .Select(i => new PreparationConversionParameters(i));
+
+        var fns1 = (byte[] data) =>
+            prepared.Select(i => new ForDeviceParametr(i, data));
+
+        var fns = (byte[] x) => new List<ForDeviceParametr>();
         return new ModbusChannel(channel, fns);
     }
 

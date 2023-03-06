@@ -10,7 +10,7 @@ public class DevParameterNetChannel
     public long NetworkChannelId { set; get; }
     public NetworkChannel NetworkChannel { set; get; } = null!;
     public ushort IndexNumber { set; get; }
-    public ushort BitIndexNumber { set; get; }
+    public byte BitIndexNumber { set; get; }
 }
 
 public static class ModelBuilderForNetworkChannelDeviceParameterExtension

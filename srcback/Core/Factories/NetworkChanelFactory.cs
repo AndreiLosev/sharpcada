@@ -10,19 +10,33 @@ public class NetworkChanelFactory : ICoreFactory
 {
     public ModbusChannel Create(EntityModbusChannel channel)
     {
-        var prepared = channel.DevParameterNetChannels
-            .Select(i => new PreparationConversionParameters(i));
+        var fn = (byte[] data) =>
+            channel.DevParameterNetChannels
+                .Select(i => new ForDeviceParametr(i, data))
+                .ToArray();
 
-        var fns1 = (byte[] data) =>
-            prepared.Select(i => new ForDeviceParametr(i, data));
-
-        var fns = (byte[] x) => new List<ForDeviceParametr>();
-        return new ModbusChannel(channel, fns);
+        return new ModbusChannel(channel, fn);
     }
 
     public ProfinetChannel Create(EntityNetworkChannel channel) //TODO ProfinetChannel
     {
         var fns = () => new List<ForDeviceParametr>();
         return new ProfinetChannel(channel, fns);
+    }
+
+    public Dictionary<long, ModbusChannel> CreateDictionary(
+        ICollection<EntityModbusChannel> channels)
+    {
+        return channels.ToDictionary(
+            i => i.Id,
+            i => this.Create(i));
+    }
+
+    public Dictionary<long, ProfinetChannel> CreateDictionary(
+        ICollection<EntityNetworkChannel> channels)
+    {
+        return channels.ToDictionary(
+            i => i.Id,
+            i => this.Create(i));
     }
 }

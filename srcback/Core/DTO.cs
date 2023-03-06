@@ -1,6 +1,7 @@
-using sharpcada.Data.Entities;
+using EntityNetChanelDevParam = sharpcada.Data.Entities.DevParameterNetChannel;
 using sharpcada.Core.Enams;
 using sharpcada.Exception;
+
 namespace sharpcada.Core.DTO;
 
 public struct ForDeviceParametr
@@ -9,46 +10,10 @@ public struct ForDeviceParametr
     public byte[] Value { init; get; }
 
     public ForDeviceParametr(
-        PreparationConversionParameters preparation,
+        EntityNetChanelDevParam paramChannel,
         byte[] data)
     {
-        ParamAddres = preparation.ParameterId;
-        if (preparation.Length == 0)
-        {
-            throw new UnimplementedExceprion(); //TODO;
-        }
-
-        Value = data
-            .Skip(preparation.IndexNumber)
-            .Take(preparation.Length)
-            .ToArray();
-
-    }
-}
-
-public struct ForNetworkChunnel
-{
-    public long  ChanelAddres { init; get; }
-    public float Value { init; get; }
-}
-
-public struct PreparationConversionParameters
-{
-    public long ParameterId;
-    public byte Length;
-    public ushort IndexNumber;
-    public ushort BitIndexNumber;
-
-    public PreparationConversionParameters(
-        DevParameterNetChannel paramChannel)
-    {
-        ParameterId = paramChannel.DeviceParameterId;
-    
-        if (paramChannel.DeviceParameter is null) {
-            return;
-        }
-
-        Length = paramChannel.DeviceParameter.Type switch
+        var length = paramChannel.DeviceParameter.Type switch
         {
             ParameterType.Bool => 0,
             ParameterType.Int8 => 1,
@@ -64,7 +29,59 @@ public struct PreparationConversionParameters
             _ => throw new UnimplementedExceprion(),
         };
 
-        IndexNumber = paramChannel.IndexNumber;
-        BitIndexNumber = paramChannel.BitIndexNumber;
+        ParamAddres = paramChannel.DeviceParameterId;
+
+        if (length == 0)
+        {
+            Value = new byte[]
+            {
+                data.Skip(paramChannel.IndexNumber)
+                    .Take(1)
+                    .First(),
+                paramChannel.BitIndexNumber,
+            };
+            return;
+        }
+
+        Value = data
+            .Skip(paramChannel.IndexNumber)
+            .Take(length)
+            .ToArray();
+
     }
+}
+
+public struct ForNetworkChunnel
+{
+    public long  ChanelAddres { init; get; }
+    public byte[] Value { init; get; }
+    public ushort IndexNumber { init; get; }
+    public byte BitIndexNumber { init; get; }
+
+    public ForNetworkChunnel(
+        float value,
+        long addres,
+        ParameterType type,
+        ushort indexNumber,
+        byte bitIndexNumber)
+    {
+        ChanelAddres = addres;
+        Value = type switch
+        {
+            ParameterType.Bool => value > 0.5 ? new byte[] { 1 } : new byte[] { 0 },
+            ParameterType.Int8 => new byte[] { (byte) value },
+            ParameterType.Uint8 => new byte[] { (byte) value },
+            ParameterType.Int16 => BitConverter.GetBytes((short)value),
+            ParameterType.Uint16 => BitConverter.GetBytes((ushort)value),
+            ParameterType.Int32 => BitConverter.GetBytes((int)value),
+            ParameterType.Uint32 => BitConverter.GetBytes((uint)value),
+            ParameterType.Int64 => BitConverter.GetBytes((long)value),
+            ParameterType.Uint64 => BitConverter.GetBytes((ulong)value),
+            ParameterType.Float32 => BitConverter.GetBytes(value),
+            ParameterType.Float64 => BitConverter.GetBytes((double)value),
+            _ => throw new UnimplementedExceprion(),
+        };
+        IndexNumber = indexNumber;
+        BitIndexNumber = bitIndexNumber;
+    }    
 }

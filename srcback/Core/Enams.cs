@@ -6,6 +6,13 @@ public enum NetworkProtocol: byte
     ProfiNet = 1,
 }
 
+public enum NetworkChannelType: byte
+{
+    Read = 0,
+    WriteSingle = 1,
+    WriteMultiple = 2,
+}
+
 public enum ModbusFunctionCode : byte
 {
     ReadCoils = 1,

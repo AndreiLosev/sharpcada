@@ -9,7 +9,7 @@ public class Device : EntityBaseWhitDate
     public string IpAddres { get; set; } = null!;
     public NetworkProtocol Protocol { get; set; }
     public ICollection<DeviceParameter>? Parameters { get; set; }
-    public ICollection<NetworkChannel>? NetworkChannels { get; set; }
+    public  ICollection<NetworkChannel>? NetworkChannels { get; set; }
 }
 
 public static class ModelBuilderForDeviceExtension

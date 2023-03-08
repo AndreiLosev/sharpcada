@@ -53,19 +53,17 @@ public struct ForDeviceParametr
 
 public struct ForNetworkChunnel
 {
-    public long  ChanelAddres { init; get; }
+    public (long Single, long Multiple)  ChanelAddres { init; get; }
     public byte[] Value { init; get; }
     public ushort IndexNumber { init; get; }
     public byte BitIndexNumber { init; get; }
 
     public ForNetworkChunnel(
         float value,
-        long addres,
         ParameterType type,
-        ushort indexNumber,
-        byte bitIndexNumber)
+        (long singleaddres, long multipleaddres, ushort indexnumber, byte bitindexnumber) param)
     {
-        ChanelAddres = addres;
+        ChanelAddres = (param.singleaddres, param.multipleaddres);
         Value = type switch
         {
             ParameterType.Bool => value > 0.5 ? new byte[] { 1 } : new byte[] { 0 },
@@ -81,7 +79,7 @@ public struct ForNetworkChunnel
             ParameterType.Float64 => BitConverter.GetBytes((double)value),
             _ => throw new UnimplementedExceprion(),
         };
-        IndexNumber = indexNumber;
-        BitIndexNumber = bitIndexNumber;
+        IndexNumber = param.indexnumber;
+        BitIndexNumber = param.bitindexnumber;
     }    
 }

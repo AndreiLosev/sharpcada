@@ -8,7 +8,7 @@ namespace sharpcada.Core.Factories;
 
 public class NetworkChanelFactory : ICoreFactory
 {
-    public ModbusChannel Create(EntityModbusChannel channel)
+    public Contracts.INetworkChannel<IModbus> Create(EntityModbusChannel channel)
     {
         var fn = (byte[] data) =>
             channel.DevParameterNetChannels
@@ -18,13 +18,13 @@ public class NetworkChanelFactory : ICoreFactory
         return new ModbusChannel(channel, fn);
     }
 
-    public ProfinetChannel Create(EntityNetworkChannel channel) //TODO ProfinetChannel
+    public Contracts.INetworkChannel<IProfiNet> Create(EntityNetworkChannel channel) //TODO ProfinetChannel
     {
         var fns = () => new List<ForDeviceParametr>();
         return new ProfinetChannel(channel, fns);
     }
 
-    public Dictionary<long, ModbusChannel> CreateDictionary(
+    public Dictionary<long, Contracts.INetworkChannel<IModbus>> CreateDictionary(
         ICollection<EntityModbusChannel> channels)
     {
         return channels.ToDictionary(
@@ -32,7 +32,7 @@ public class NetworkChanelFactory : ICoreFactory
             i => this.Create(i));
     }
 
-    public Dictionary<long, ProfinetChannel> CreateDictionary(
+    public Dictionary<long, Contracts.INetworkChannel<IProfiNet>> CreateDictionary(
         ICollection<EntityNetworkChannel> channels)
     {
         return channels.ToDictionary(

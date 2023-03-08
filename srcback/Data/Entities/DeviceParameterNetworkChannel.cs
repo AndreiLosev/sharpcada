@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using sharpcada.Core.Enams;
 
 namespace sharpcada.Data.Entities;
 
@@ -11,6 +12,7 @@ public class DevParameterNetChannel
     public NetworkChannel NetworkChannel { set; get; } = null!;
     public ushort IndexNumber { set; get; }
     public byte BitIndexNumber { set; get; }
+    public NetworkChannelType ChannelType { set; get; }
 }
 
 public static class ModelBuilderForNetworkChannelDeviceParameterExtension

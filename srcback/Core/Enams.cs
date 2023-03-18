@@ -9,8 +9,7 @@ public enum NetworkProtocol: byte
 public enum NetworkChannelType: byte
 {
     Read = 0,
-    WriteSingle = 1,
-    WriteMultiple = 2,
+    Write = 1,
 }
 
 public enum ModbusFunctionCode : byte

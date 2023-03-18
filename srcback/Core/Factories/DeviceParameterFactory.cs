@@ -1,4 +1,5 @@
 using EntityDeviceParameter = sharpcada.Data.Entities.DeviceParameter;
+using EntityModbusDev = sharpcada.Data.Entities.ModbusDevice;
 using sharpcada.Core.Contracts;
 using sharpcada.Core.DTO;
 using sharpcada.Core.Enams;
@@ -14,32 +15,31 @@ public class DeviceParameterFactory : ICoreFactory
             return null;
         }
 
-        (long singleAddres, long multipleAddres, ushort indexNumber, byte bitIndexNumber) param =
-            (singleAddres: 0L, multipleAddres: 0L, indexNumber: 0, bitIndexNumber: 0);
-
-        var single = entity.DevParameterNetChannels
-            .Where(d => d.ChannelType is NetworkChannelType.WriteSingle)
+        var writeDevParameterNetChannels = entity.DevParameterNetChannels
+            .Where(d => d.ChannelType is NetworkChannelType.Write)
             .First();
 
-        if (single is not null)
+
+        if (writeDevParameterNetChannels is null)
         {
-            param.singleAddres = single.NetworkChannelId;
+            return null;
         }
 
-        var multiple = entity.DevParameterNetChannels
-            .Where(d => d.ChannelType is NetworkChannelType.WriteMultiple)
-            .First();
+        var device = entity.Device;
 
-        if (multiple is not null)
+        if (device is not EntityModbusDev)
         {
-            param.multipleAddres = multiple.NetworkChannelId;
-            param.indexNumber = multiple.IndexNumber;
-            param.bitIndexNumber = multiple.BitIndexNumber;
+            throw new System.Exception();
         }
+
 
         return new DeviceParameter(
             entity,
-            (float value) => new ForNetworkChunnel(value, entity.Type, param));
+            (float value) => new ForNetworkChunnel(
+                value,
+                entity.Type,
+                ((EntityModbusDev)device).ByteOrder,
+                writeDevParameterNetChannels));
     }
 
     public Dictionary<long, DeviceParameter> CreateDictionary(

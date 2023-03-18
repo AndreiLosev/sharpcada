@@ -53,18 +53,23 @@ public struct ForDeviceParametr
 
 public struct ForNetworkChunnel
 {
-    public (long Single, long Multiple)  ChanelAddres { init; get; }
+    public const byte FIRST_BYTE = 100; 
+    public const byte SECOND_BYTE = 200;
+
+    public long ChanelAddres { init; get; }
     public byte[] Value { init; get; }
     public ushort IndexNumber { init; get; }
     public byte BitIndexNumber { init; get; }
+    public ByteOrder ByteOrder { init; get; }
 
     public ForNetworkChunnel(
         float value,
         ParameterType type,
-        (long singleaddres, long multipleaddres, ushort indexnumber, byte bitindexnumber) param)
+        ByteOrder byteOrder,
+        EntityNetChanelDevParam entity)
     {
-        ChanelAddres = (param.singleaddres, param.multipleaddres);
-        Value = type switch
+        ChanelAddres = entity.NetworkChannelId;
+        var prepValue = type switch
         {
             ParameterType.Bool => value > 0.5 ? new byte[] { 1 } : new byte[] { 0 },
             ParameterType.Int8 => new byte[] { (byte) value },
@@ -79,7 +84,37 @@ public struct ForNetworkChunnel
             ParameterType.Float64 => BitConverter.GetBytes((double)value),
             _ => throw new UnimplementedExceprion(),
         };
-        IndexNumber = param.indexnumber;
-        BitIndexNumber = param.bitindexnumber;
-    }    
+
+        Value = ByteOrder switch
+        {
+            ByteOrder.LittleEndian => prepValue.Reverse().ToArray(),
+            _ => prepValue,
+        };
+
+        IndexNumber = entity.IndexNumber;
+        BitIndexNumber = entity.BitIndexNumber;
+    }
+
+    public ForNetworkChunnel(
+        ushort value,
+        ForNetworkChunnel forChannel)
+    {
+        ChanelAddres = forChannel.ChanelAddres;
+        var prepValue = BitConverter.GetBytes(value);
+
+        Value = ByteOrder switch
+        {
+            ByteOrder.LittleEndian => prepValue.Reverse().ToArray(),
+            _ => prepValue,
+        };
+
+        IndexNumber = forChannel.IndexNumber;
+        BitIndexNumber = 0;
+    }
+
+    public bool isBit() =>
+        Value.Length == 1 && BitIndexNumber < FIRST_BYTE;
+
+    public bool isByte() =>
+        Value.Length == 1 && BitIndexNumber >= FIRST_BYTE;
 }

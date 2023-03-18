@@ -57,14 +57,16 @@ public class ModbusChannel : Contracts.INetworkChannel<IModbus>
                 await client.WriteSingleCoilAsync(_dataAddres, singleBit);
                 break;
             case ModbusFnCode.WriteMultipleCoils:
-                await client.WriteMultipleCoilsAsync(_dataAddres, new bool[] {});
+                var multipleBits = this.createMultipleCoilsValue(forChannel);
+                await client.WriteMultipleCoilsAsync(_dataAddres, multipleBits);
                 break;
             case ModbusFnCode.WriteSingleRegister:
                 var singleRegister = BitConverter.ToUInt16(forChannel.First().Value);
                 await client.WriteSingleRegisterAsync(_dataAddres, singleRegister);
                 break;
             case ModbusFnCode.WriteMultipleRegisters:
-                await client.WritetMultipleRegisters(_dataAddres, new ushort[] {});
+                var multipleRegisters = this.createMultipleRegisterValue(forChannel);
+                await client.WritetMultipleRegisters(_dataAddres, multipleRegisters);
                 break;
         }
     }
@@ -79,5 +81,72 @@ public class ModbusChannel : Contracts.INetworkChannel<IModbus>
     };
 
     public bool IsWrite() => !this.IsRead();
+
+    private bool[] createMultipleCoilsValue(ForNetworkChunnel[] forChannel) =>
+        forChannel
+            .OrderBy(i => i.IndexNumber)
+            .Select(i => i.Value.First().GetBit(0))
+            .ToArray();
+
+    private ushort[] createMultipleRegisterValue(ForNetworkChunnel[] forNetworks)
+    {
+        var bits = forNetworks
+            .Where(i => i.isBit())
+            .GroupBy(i => i.IndexNumber)
+            .Select(g => this.createRegisterFromBits(g.ToArray()));
+
+        var bytes = forNetworks
+            .Where(i => i.isByte())
+            .GroupBy(i => i.IndexNumber)
+            .Select(g => this.createRegisterFromBytes(g.ToArray()));
+
+        var registesrs = forNetworks
+            .Where(i => !i.isByte() && !i.isBit())
+            .Concat(bits)
+            .Concat(bytes)
+            .OrderBy(i => i.IndexNumber)
+            .Select(i => i.Value);
+
+        var result = new List<ushort>();
+
+        foreach (var reg in registesrs)
+        {
+            var values = reg.Chunk(2).Select(i => BitConverter.ToUInt16(i));
+            foreach (var value in values)
+            {
+                result.Add(value);
+            }
+        }
+
+        return result.ToArray();
+    }
+
+    private ForNetworkChunnel createRegisterFromBits(ForNetworkChunnel[] forChannel)
+    {
+        var result = (ushort)forChannel.Aggregate(0, (acc, i) =>
+        {
+            acc.SetBit(i.BitIndexNumber, i.Value.First().GetBit(0));
+            return acc;
+        });
+
+        return new ForNetworkChunnel(result, forChannel.First());
+    }
+
+    private ForNetworkChunnel createRegisterFromBytes(ForNetworkChunnel[] forChannel)
+    {
+        var result = (ushort)forChannel.Aggregate(0, (acc, i) =>
+        {
+            byte pos = i.BitIndexNumber switch
+            {
+                ForNetworkChunnel.FIRST_BYTE => 0,
+                ForNetworkChunnel.SECOND_BYTE => 1,
+                _ => throw new UnimplementedExceprion(),
+            };
+            acc.SetByte(pos, i.Value.First());
+            return acc;       
+        });
+
+        return new ForNetworkChunnel(result, forChannel.First());
+    }
 }
 

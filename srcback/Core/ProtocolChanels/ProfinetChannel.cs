@@ -14,15 +14,15 @@ public class ProfinetChannel : Contracts.INetworkChannel<IProfiNet>
         //TODO
     }
 
-    public async Task<byte[]> ReadAsync(IProfiNet client)
+    public async Task<ForDeviceParametr[]> ReadAsync(IProfiNet client)
     {
         //TODO
         await Task.Delay(1);
 
-        return new byte[] {};
+        return new ForDeviceParametr[] {};
     }
 
-    public async Task WriteAsync(IProfiNet client)
+    public async Task WriteAsync(IProfiNet client, ForNetworkChunnel[] forChannel)
     {
         // TODO
         await Task.Delay(1);

@@ -118,3 +118,12 @@ public struct ForNetworkChunnel
     public bool isByte() =>
         Value.Length == 1 && BitIndexNumber >= FIRST_BYTE;
 }
+
+
+public struct DeviceParameterView
+{
+    public string Name { get; init; }
+    public string? Unit { get; init; }
+    public ParameterType Type { get; init; }
+    public float? Value { get; init; }
+}

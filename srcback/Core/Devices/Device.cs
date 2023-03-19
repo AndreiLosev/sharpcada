@@ -29,4 +29,38 @@ public abstract class Device<T> where T : class
             .ToDictionary(c => c.Key, c => c.Value);
 
     }
+
+    public async Task Read()
+    {
+        foreach (var channel in _readNetworkChannels)
+        {
+            var readResult = new DTO.ForDeviceParametr[] {};
+
+            try
+            {
+                readResult = await channel.Value.ReadAsync(_client);
+            }
+            catch (System.Exception e)
+            {
+                //TODO handle execption
+                Console.WriteLine(e);
+            }
+            
+            foreach (var item in readResult)
+            {
+                _parameters[item.ParamAddres].SetValue(item.Value);
+            }
+        }
+    }
+
+    public Dictionary<long, DTO.DeviceParameterView> GetParameters() =>
+        _parameters.ToDictionary(p => p.Key, p => p.Value.GetView());
+
+    public async Task Write(Dictionary<long, float> values)
+    {
+        var preporation = values
+            .Select(v => _parameters[v.Key].prepareForWriteing(v.Value));
+
+
+    }
 }

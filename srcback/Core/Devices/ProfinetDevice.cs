@@ -11,7 +11,11 @@ public class ProfinetDevice : Device<IProfiNet>
         EntityDevice device,
         Dictionary<long, Contracts.INetworkChannel<IProfiNet>> networkChannels,
         Dictionary<long, DeviceParameter> deviceParameters,
-        IProfiNet client) : base(device, networkChannels, deviceParameters, client)
+        IProfiNet client) : base(
+            device,
+            networkChannels,
+            deviceParameters,
+            client)
     {
         //TODO
     }

@@ -14,7 +14,11 @@ public class ModbusDevice : Device<IModbus>
         EntityModbusDevice device,
         Dictionary<long, Contracts.INetworkChannel<IModbus>> networkChannels,
         Dictionary<long, DeviceParameter> deviceParameters,
-        IModbus client) : base(device, networkChannels, deviceParameters, client)
+        IModbus client) : base(
+            device,
+            networkChannels,
+            deviceParameters,
+            client)
     {
         _deviceAddres = device.DeviceAddres;
         _port = device.Port;

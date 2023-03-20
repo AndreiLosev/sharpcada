@@ -59,8 +59,13 @@ public abstract class Device<T> where T : class
     public async Task Write(Dictionary<long, float> values)
     {
         var preporation = values
-            .Select(v => _parameters[v.Key].prepareForWriteing(v.Value));
+            .Select(v => _parameters[v.Key].prepareForWriteing(v.Value))
+            .GroupBy(v => v.ChanelAddres)
+            .Select(v => (key: v.Key, value: v.ToArray()));
 
-
+        foreach (var item in preporation)
+        {
+            await this._writeNetworkChannels[item.key].WriteAsync(_client, item.value);
+        }
     }
 }

@@ -14,17 +14,20 @@ public class DeviceFactory : ICoreFactory
     private readonly NetworkChanelFactory _networkChanelFactory;
     private readonly ModbusFactory _modbusFactory;
     private readonly ProfinetFactory _profinetFactory;
+    private readonly ILogger _loger;
 
     public DeviceFactory(
         DeviceParameterFactory deviceParameterFactory,
         NetworkChanelFactory networkChanelFactory,
         ModbusFactory modbusFactory,
-        ProfinetFactory profinetFactory)
+        ProfinetFactory profinetFactory,
+        ILogger logger)
     {
         _deviceParameterFactory = deviceParameterFactory;
         _networkChanelFactory = networkChanelFactory;
         _modbusFactory = modbusFactory;
         _profinetFactory = profinetFactory;
+        _loger = logger;
     }
 
     public Device<IModbus> Create(
@@ -44,7 +47,7 @@ public class DeviceFactory : ICoreFactory
         var deviceParameters = _deviceParameterFactory.CreateDictionary(
             device.Parameters ?? new EntityDeviceParameter[] {});
 
-        return new ModbusDevice(device, modbusChannels, deviceParameters, client);
+        return new ModbusDevice(device, modbusChannels, deviceParameters, client, _loger);
     }
 
     public Device<IProfiNet> Create(
@@ -57,7 +60,7 @@ public class DeviceFactory : ICoreFactory
         var deviceParameters = _deviceParameterFactory.CreateDictionary(
             device.Parameters ?? new EntityDeviceParameter[] {});
 
-        return new ProfinetDevice(device, networkChannels, deviceParameters, client);
+        return new ProfinetDevice(device, networkChannels, deviceParameters, client, _loger);
     }
 
     public Dictionary<long, Device<IModbus>> CreateDictionary(

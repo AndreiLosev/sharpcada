@@ -4,7 +4,8 @@ using sharpcada.Core.Contracts;
 using sharpcada.Core.DTO;
 using sharpcada.Exception.Core.Modbus;
 using sharpcada.Exception;
-using srcback.Core.Helpers;
+using sharpcada.Core.Helpers;
+using sharpcada.Core.Enams;
 
 namespace sharpcada.Core.ProtocolChanels;
 
@@ -13,16 +14,19 @@ public class ModbusChannel : Contracts.INetworkChannel<IModbus>
     private uint _dataAddres;
     private ModbusFnCode _functionCode;
     private ushort? _length;
-    private Func<byte[], ForDeviceParametr[]> _whereAndWhatToSend;
+    private Func<byte[], ForDeviceParametr[]> _postProcess;
+    private ByteOrder _byteOrder;
 
     public ModbusChannel(
         EntityModbusChanel chanel,
-        Func<byte[], ForDeviceParametr[]> whereAndWhatToSend)
+        ByteOrder byteOrder,
+        Func<byte[], ForDeviceParametr[]> postProcess)
     {
         _dataAddres = chanel.DataAddres;
         _functionCode = chanel.FunctionCode;
         _length = chanel.Length;
-        _whereAndWhatToSend = whereAndWhatToSend;
+        _byteOrder = byteOrder;
+        _postProcess = postProcess;
     }
 
     public async Task<ForDeviceParametr[]> ReadAsync(IModbus client)
@@ -45,7 +49,19 @@ public class ModbusChannel : Contracts.INetworkChannel<IModbus>
             _ => throw new UnimplementedExceprion(),
         };
 
-        return _whereAndWhatToSend(bytes);
+        var result = _byteOrder switch
+        {
+            ByteOrder.BigEndian => _postProcess(bytes),
+            ByteOrder.LittleEndian => _postProcess(bytes)
+                .Select(i => i.Value.Length switch
+                {
+                    1 => i,
+                    _ => new ForDeviceParametr(i.Value.Reverse().ToArray(), i.ParamAddres),
+                }).ToArray(),
+                _ => throw new UnimplementedExceprion(),
+            };
+
+        return result;
     }
 
     public async Task WriteAsync(IModbus client, ForNetworkChunnel[] forChannel)
@@ -57,11 +73,23 @@ public class ModbusChannel : Contracts.INetworkChannel<IModbus>
                 await client.WriteSingleCoilAsync(_dataAddres, singleBit);
                 break;
             case ModbusFnCode.WriteMultipleCoils:
-                var multipleBits = this.createMultipleCoilsValue(forChannel);
+                var multipleBits = _byteOrder switch
+                {
+                    ByteOrder.BigEndian => this.createMultipleCoilsValue(forChannel),
+                    ByteOrder.LittleEndian =>
+                        this.createMultipleCoilsValue(forChannel).Reverse().ToArray(),
+                    _ => throw new UnimplementedExceprion(),
+                };
                 await client.WriteMultipleCoilsAsync(_dataAddres, multipleBits);
                 break;
             case ModbusFnCode.WriteSingleRegister:
-                var singleRegister = BitConverter.ToUInt16(forChannel.First().Value);
+                var singleRegister = _byteOrder switch
+                {
+                    ByteOrder.BigEndian => BitConverter.ToUInt16(forChannel.First().Value),
+                    ByteOrder.LittleEndian =>
+                        BitConverter.ToUInt16(forChannel.First().Value.Reverse().ToArray()),
+                    _ => throw new UnimplementedExceprion(),
+                };
                 await client.WriteSingleRegisterAsync(_dataAddres, singleRegister);
                 break;
             case ModbusFnCode.WriteMultipleRegisters:
@@ -109,9 +137,16 @@ public class ModbusChannel : Contracts.INetworkChannel<IModbus>
 
         var result = new List<ushort>();
 
-        foreach (var reg in registesrs)
+        foreach (var regBytes in registesrs)
         {
-            var values = reg.Chunk(2).Select(i => BitConverter.ToUInt16(i));
+            var values = regBytes.Chunk(2)
+                .Select(i => _byteOrder switch
+                {
+                    ByteOrder.BigEndian => BitConverter.ToUInt16(i),
+                    ByteOrder.LittleEndian =>
+                        BitConverter.ToUInt16(i.Reverse().ToArray()),
+                    _ => throw new UnimplementedExceprion(),
+                });
             foreach (var value in values)
             {
                 result.Add(value);
@@ -147,6 +182,14 @@ public class ModbusChannel : Contracts.INetworkChannel<IModbus>
         });
 
         return new ForNetworkChunnel(result, forChannel.First());
+    }
+
+    private async Task<byte[]> setByteOrder(Func<Task<byte[]>> fn)
+    {
+        var response = await fn();
+
+
+        return response;
     }
 }
 

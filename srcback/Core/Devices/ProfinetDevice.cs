@@ -11,12 +11,19 @@ public class ProfinetDevice : Device<IProfiNet>
         EntityDevice device,
         Dictionary<long, Contracts.INetworkChannel<IProfiNet>> networkChannels,
         Dictionary<long, DeviceParameter> deviceParameters,
-        IProfiNet client) : base(
+        IProfiNet client,
+        ILogger logger) : base(
             device,
             networkChannels,
             deviceParameters,
-            client)
+            client,
+            logger)
     {
         //TODO
+    }
+
+    protected override string _getLogMessage(System.Exception e)
+    {
+        return $"device: {_name} error: {e.ToString()}";
     }
 }

@@ -9,7 +9,7 @@ public class ProfinetChannel : Contracts.INetworkChannel<IProfiNet>
     //todo
     public ProfinetChannel(
         EntityChanel chanel,
-        Func<List<ForDeviceParametr>> whereAndWhatToSend)
+        Func<byte[], ForDeviceParametr[]> whereAndWhatToSend)
     {
         //TODO
     }

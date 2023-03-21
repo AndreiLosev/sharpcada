@@ -10,12 +10,14 @@ public abstract class Device<T> where T : class
     protected Dictionary<long, Contracts.INetworkChannel<T>> _readNetworkChannels;
     protected Dictionary<long, DeviceParameter> _parameters;
     protected T _client;
+    protected readonly ILogger _loger;
 
     public Device(
         EntityDevice device,
         Dictionary<long, Contracts.INetworkChannel<T>> networkChannels,
         Dictionary<long, DeviceParameter> deviceParameters,
-        T client)
+        T client,
+        ILogger logger)
     {
         _name = device.Name;
         _ipAddres = device.IpAddres;
@@ -27,6 +29,7 @@ public abstract class Device<T> where T : class
         _readNetworkChannels = networkChannels
             .Where(c => c.Value.IsRead())
             .ToDictionary(c => c.Key, c => c.Value);
+        _loger = logger;
 
     }
 
@@ -42,8 +45,7 @@ public abstract class Device<T> where T : class
             }
             catch (System.Exception e)
             {
-                //TODO handle execption
-                Console.WriteLine(e);
+                _loger.LogInformation(_getLogMessage(e));
             }
             
             foreach (var item in readResult)
@@ -65,7 +67,16 @@ public abstract class Device<T> where T : class
 
         foreach (var item in preporation)
         {
-            await this._writeNetworkChannels[item.key].WriteAsync(_client, item.value);
+            try
+            {
+                await this._writeNetworkChannels[item.key].WriteAsync(_client, item.value);
+            }
+            catch (System.Exception e)
+            {
+                _loger.LogInformation(_getLogMessage(e));
+            }
         }
     }
+
+    protected abstract string _getLogMessage(System.Exception e);
 }

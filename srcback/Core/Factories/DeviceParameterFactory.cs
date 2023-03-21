@@ -27,18 +27,11 @@ public class DeviceParameterFactory : ICoreFactory
 
         var device = entity.Device;
 
-        if (device is not EntityModbusDev)
-        {
-            throw new System.Exception();
-        }
-
-
         return new DeviceParameter(
             entity,
             (float value) => new ForNetworkChunnel(
                 value,
                 entity.Type,
-                ((EntityModbusDev)device).ByteOrder,
                 writeDevParameterNetChannels));
     }
 

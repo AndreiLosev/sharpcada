@@ -1,4 +1,4 @@
-namespace srcback.Core.Helpers;
+namespace sharpcada.Core.Helpers;
 
 public static class BitByte
 {
@@ -100,5 +100,17 @@ public static class BitByte
         {
             dw.SetBit((byte)(i + offset), value.GetBit(i));
         }
+    }
+
+    public static byte FromBitArray(bool[] value)
+    {
+        ushort result = 0;
+
+        for (byte i = 0; i < 8; i++)
+        {
+            result.SetBit(i, value[i]);
+        }
+
+        return (byte)result;
     }
 }

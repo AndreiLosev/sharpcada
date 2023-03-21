@@ -2,7 +2,7 @@ using EnitityDeviceParametr = sharpcada.Data.Entities.DeviceParameter;
 using sharpcada.Exception;
 using sharpcada.Core.Enams;
 using sharpcada.Core.DTO;
-using srcback.Core.Helpers;
+using sharpcada.Core.Helpers;
 
 namespace sharpcada.Core;
 

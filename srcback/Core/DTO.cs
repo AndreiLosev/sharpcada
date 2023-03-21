@@ -49,6 +49,12 @@ public struct ForDeviceParametr
             .ToArray();
 
     }
+
+    public ForDeviceParametr(byte[] newValue, long paramAddres)
+    {
+        Value = newValue;
+        ParamAddres = paramAddres;
+    }
 }
 
 public struct ForNetworkChunnel
@@ -60,16 +66,14 @@ public struct ForNetworkChunnel
     public byte[] Value { init; get; }
     public ushort IndexNumber { init; get; }
     public byte BitIndexNumber { init; get; }
-    public ByteOrder ByteOrder { init; get; }
 
     public ForNetworkChunnel(
         float value,
         ParameterType type,
-        ByteOrder byteOrder,
         EntityNetChanelDevParam entity)
     {
         ChanelAddres = entity.NetworkChannelId;
-        var prepValue = type switch
+        Value = type switch
         {
             ParameterType.Bool => value > 0.5 ? new byte[] { 1 } : new byte[] { 0 },
             ParameterType.Int8 => new byte[] { (byte) value },
@@ -85,12 +89,6 @@ public struct ForNetworkChunnel
             _ => throw new UnimplementedExceprion(),
         };
 
-        Value = ByteOrder switch
-        {
-            ByteOrder.LittleEndian => prepValue.Reverse().ToArray(),
-            _ => prepValue,
-        };
-
         IndexNumber = entity.IndexNumber;
         BitIndexNumber = entity.BitIndexNumber;
     }
@@ -100,13 +98,7 @@ public struct ForNetworkChunnel
         ForNetworkChunnel forChannel)
     {
         ChanelAddres = forChannel.ChanelAddres;
-        var prepValue = BitConverter.GetBytes(value);
-
-        Value = ByteOrder switch
-        {
-            ByteOrder.LittleEndian => prepValue.Reverse().ToArray(),
-            _ => prepValue,
-        };
+        Value = BitConverter.GetBytes(value);
 
         IndexNumber = forChannel.IndexNumber;
         BitIndexNumber = 0;

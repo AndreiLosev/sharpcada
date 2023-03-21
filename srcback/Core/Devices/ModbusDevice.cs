@@ -14,14 +14,21 @@ public class ModbusDevice : Device<IModbus>
         EntityModbusDevice device,
         Dictionary<long, Contracts.INetworkChannel<IModbus>> networkChannels,
         Dictionary<long, DeviceParameter> deviceParameters,
-        IModbus client) : base(
+        IModbus client,
+        ILogger logger) : base(
             device,
             networkChannels,
             deviceParameters,
-            client)
+            client,
+            logger)
     {
         _deviceAddres = device.DeviceAddres;
         _port = device.Port;
         _byteOrder = device.ByteOrder;
+    }
+
+    protected override string _getLogMessage(System.Exception e)
+    {
+        return $"device: {_name} error: {e.ToString()}";
     }
 }

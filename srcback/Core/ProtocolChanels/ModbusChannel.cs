@@ -73,13 +73,7 @@ public class ModbusChannel : Contracts.INetworkChannel<IModbus>
                 await client.WriteSingleCoilAsync(_dataAddres, singleBit);
                 break;
             case ModbusFnCode.WriteMultipleCoils:
-                var multipleBits = _byteOrder switch
-                {
-                    ByteOrder.BigEndian => this.createMultipleCoilsValue(forChannel),
-                    ByteOrder.LittleEndian =>
-                        this.createMultipleCoilsValue(forChannel).Reverse().ToArray(),
-                    _ => throw new UnimplementedExceprion(),
-                };
+                var multipleBits = this.createMultipleCoilsValue(forChannel);
                 await client.WriteMultipleCoilsAsync(_dataAddres, multipleBits);
                 break;
             case ModbusFnCode.WriteSingleRegister:
